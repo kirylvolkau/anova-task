@@ -6,7 +6,7 @@ public interface IReadingsStorage
 {
     public Task<int?> AddReadingsToDeviceAsync(int deviceId, IEnumerable<ReadingDto> readings);
 
-    public Task<ImmutableList<ReadingDto>?> GetReadingsFromWindowAsync(int deviceId, DateTime from, DateTime? to = null);
+    public Task<ImmutableList<ReadingDto>?> GetReadingsFromWindowAsync(int deviceId, long from, long to);
 }
 
 public class ReadingsStorage : IReadingsStorage
@@ -23,7 +23,7 @@ public class ReadingsStorage : IReadingsStorage
         throw new NotImplementedException();
     }
 
-    public Task<ImmutableList<ReadingDto>?> GetReadingsFromWindowAsync(int deviceId, DateTime from, DateTime? to = null)
+    public Task<ImmutableList<ReadingDto>?> GetReadingsFromWindowAsync(int deviceId, long from, long to)
     {
         throw new NotImplementedException();
     }

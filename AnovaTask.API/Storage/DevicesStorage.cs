@@ -6,8 +6,8 @@ public interface IDevicesStorage
 {
     public Task<DeviceDto?> CreateDeviceAsync(DeviceDto deviceDto);
     public Task<DeviceDto?> GetDeviceByIdAsync(int deviceId);
-    public Task<ImmutableList<DeviceDto>> GetAllDevicesAsync(int deviceId);
-    public Task<DeviceDto?> UpdateDeviceAsync(DeviceDto deviceDto);
+    public Task<ImmutableList<DeviceDto>> GetAllDevicesAsync();
+    public Task<DeviceDto?> UpdateDeviceAsync(int deviceId, DeviceDto deviceDto);
     public Task<DeviceDto?> DeleteDeviceByIdAsync(int deviceId);
 }
 
@@ -30,12 +30,12 @@ public class DevicesStorage : IDevicesStorage
         throw new NotImplementedException();
     }
 
-    public Task<ImmutableList<DeviceDto>> GetAllDevicesAsync(int deviceId)
+    public Task<ImmutableList<DeviceDto>> GetAllDevicesAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<DeviceDto?> UpdateDeviceAsync(DeviceDto deviceDto)
+    public Task<DeviceDto?> UpdateDeviceAsync(int deviceId, DeviceDto deviceDto)
     {
         throw new NotImplementedException();
     }
