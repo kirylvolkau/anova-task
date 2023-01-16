@@ -4,14 +4,44 @@ namespace AnovaTask.API.Storage;
 
 public interface IDevicesStorage
 {
-    public Task<Device> CreateDeviceAsync(Device device);
-    public Task<Device> GetDeviceByIdAsync(int deviceId);
-    public Task<ImmutableList<Device>> GetAllDevicesAsync(int deviceId);
-    public Task<Device> UpdateDeviceAsync(Device device);
-    public Task<Device> DeleteDeviceByIdAsync(int deviceId);
+    public Task<DeviceDto?> CreateDeviceAsync(DeviceDto deviceDto);
+    public Task<DeviceDto?> GetDeviceByIdAsync(int deviceId);
+    public Task<ImmutableList<DeviceDto>> GetAllDevicesAsync(int deviceId);
+    public Task<DeviceDto?> UpdateDeviceAsync(DeviceDto deviceDto);
+    public Task<DeviceDto?> DeleteDeviceByIdAsync(int deviceId);
 }
 
-public class DevicesStorage
+public class DevicesStorage : IDevicesStorage
 {
+    private readonly DapperContext _dapperContext;
+
+    public DevicesStorage(DapperContext dapperContext)
+    {
+        _dapperContext = dapperContext;
+    }
     
+    public Task<DeviceDto?> CreateDeviceAsync(DeviceDto deviceDto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DeviceDto?> GetDeviceByIdAsync(int deviceId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ImmutableList<DeviceDto>> GetAllDevicesAsync(int deviceId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DeviceDto?> UpdateDeviceAsync(DeviceDto deviceDto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DeviceDto?> DeleteDeviceByIdAsync(int deviceId)
+    {
+        throw new NotImplementedException();
+    }
 }

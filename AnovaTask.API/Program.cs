@@ -1,7 +1,13 @@
+using AnovaTask.API.Storage;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ------- Add services to the container. ---------
 builder.Services.AddControllers();
+
+builder.Services.AddSingleton<DapperContext>();
+builder.Services.AddScoped<IDevicesStorage, DevicesStorage>();
+builder.Services.AddScoped<IReadingsStorage, ReadingsStorage>();
 
 // Add swagger-related services
 builder.Services.AddEndpointsApiExplorer();
