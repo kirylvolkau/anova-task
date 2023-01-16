@@ -3,26 +3,27 @@ using System.Text.Json.Serialization;
 
 namespace AnovaTask.API;
 
-public record DeviceDto(
-    [property:JsonPropertyName("device_id")]
-    int DeviceId,
-    
-    [Required(AllowEmptyStrings=false)]
-    string Name,
-    
-    [Required(AllowEmptyStrings=false)]
-    string Location);
+public class DeviceDto
+{
+    [JsonPropertyName("device_id")]
+    public int DeviceId { get; set; }
 
-public record ReadingDto(
-    long timestamp,
+    [Required(AllowEmptyStrings = false)] public string Name { get; set; } = null!;
+
+    [Required(AllowEmptyStrings = false)] public string Location { get; set; } = null!;
+}
+
+public class ReadingDto
+{
+    public long Timestamp { get; set; }
     
-    [property:JsonPropertyName("device_id")]
-    int DeviceId,
-    
-    [Required(AllowEmptyStrings=false)]
-    [property:JsonPropertyName("device_id")]
-    string ReadingType,
-    
-    [Required(AllowEmptyStrings=false)]
-    [property:JsonPropertyName("raw_value")]
-    string RawValue);
+    [JsonPropertyName("device_id")] public int DeviceId { get; set; }
+
+    [Required(AllowEmptyStrings = false)]
+    [JsonPropertyName("device_id")]
+    public string ReadingType { get; set; } = null!;
+
+    [Required(AllowEmptyStrings = false)]
+    [JsonPropertyName("device_id")]
+    public string RawValue { get; set; } = null!;
+}

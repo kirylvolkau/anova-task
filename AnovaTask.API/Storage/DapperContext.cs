@@ -9,7 +9,7 @@ public class DapperContext
     
     public DapperContext(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("Postgres");
+        _connectionString = configuration.GetConnectionString("Postgres") ?? throw new Exception("No connection string.");
     }
     
     public IDbConnection CreateConnection()

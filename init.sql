@@ -14,3 +14,7 @@ create table readings (
     reading_type text not null,
     foreign key (device_id) references devices(device_id) on delete cascade
 );
+
+insert into devices (device_id, name, location) values
+(1, 'great machine 1', 'warsaw'),
+(234, 'great machine 2', 'porto');

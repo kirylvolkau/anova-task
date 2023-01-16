@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Dapper;
 
 namespace AnovaTask.API.Storage;
 
@@ -30,9 +31,13 @@ public class DevicesStorage : IDevicesStorage
         throw new NotImplementedException();
     }
 
-    public Task<ImmutableList<DeviceDto>> GetAllDevicesAsync()
+    public async Task<ImmutableList<DeviceDto>> GetAllDevicesAsync()
     {
-        throw new NotImplementedException();
+        var commandText = $"select * from devices";
+        using var connection = _dapperContext.CreateConnection();
+        var devices = await connection.QueryAsync<DeviceDto>(commandText) ?? new List<DeviceDto>();
+
+        return devices.ToImmutableList();
     }
 
     public Task<DeviceDto?> UpdateDeviceAsync(int deviceId, DeviceDto deviceDto)
