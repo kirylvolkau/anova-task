@@ -6,6 +6,10 @@ namespace AnovaTask.API.Storage;
 public class DapperContext
 {
     private readonly string _connectionString;
+
+    public readonly static string DevicesTable = "devices";
+
+    public readonly static string ReadingsTable = "readings";
     
     public DapperContext(IConfiguration configuration)
     {

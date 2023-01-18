@@ -5,13 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace AnovaTask.API.Controllers;
 
 [ApiController]
-[Route("/readings/{deviceId:int}")]
+[Route("/readings")]
 public class ReadingsController : ControllerBase
 {
     private readonly IReadingsStorage _readingsStorage;
-    
-    [FromRoute]
-    public int DeviceId { get; set; }
 
     public ReadingsController(IReadingsStorage readingsStorage)
     {
@@ -21,17 +18,20 @@ public class ReadingsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AssignReadingsToDeviceAsync([FromBody] ImmutableList<ReadingDto> readingDtos)
     {
-        var insertedLines = await _readingsStorage.AddReadingsToDeviceAsync(DeviceId, readingDtos);
+        var insertedLines = await _readingsStorage.AddReadingsAsync(readingDtos);
         
-        return insertedLines is null ? Ok() : NotFound($"Device with ID {DeviceId} doesn't exist.");
+        return insertedLines == 0 ? BadRequest("Couldn't insert all readings.") : Ok();
     }
 
-    [HttpGet("/{from:long}/{to:long?}")]
-    public async Task<IActionResult> GetReadingsForDeviceAsync([FromRoute] long from, [FromRoute] long? to = null)
+    [HttpGet("{deviceId:int}/{from:long}/{to:long?}")]
+    public async Task<IActionResult> GetReadingsForDeviceAsync(
+        [FromRoute] int deviceId,
+        [FromRoute] long from,
+        [FromRoute] long? to = null)
     {
         to ??= DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var readings = await _readingsStorage.GetReadingsFromWindowAsync(DeviceId, from, to.Value);
+        var readings = await _readingsStorage.GetReadingsFromWindowAsync(deviceId, from, to.Value);
         
-        return readings is not null ? Ok(readings) : NotFound($"Device with ID {DeviceId} doesn't exist.");
+        return readings is not null ? Ok(readings) : NotFound($"Device with ID {deviceId} doesn't exist.");
     }
 }
