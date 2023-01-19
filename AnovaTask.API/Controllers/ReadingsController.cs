@@ -16,20 +16,23 @@ public class ReadingsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AssignReadingsToDeviceAsync([FromBody] ImmutableList<ReadingDto> readingDtos)
+    public async Task<IActionResult> InsertReadingsAsync([FromBody] ImmutableList<ReadingDto> readingDtos)
     {
         var insertedLines = await _readingsStorage.AddReadingsAsync(readingDtos);
         
-        return insertedLines == 0 ? BadRequest("Couldn't insert all readings.") : Ok();
+        return insertedLines ? Ok() : BadRequest("Couldn't insert all readings.");
     }
 
     [HttpGet("{deviceId:int}/{from:long}/{to:long?}")]
-    public async Task<IActionResult> GetReadingsForDeviceAsync(
-        [FromRoute] int deviceId,
-        [FromRoute] long from,
-        [FromRoute] long? to = null)
+    public async Task<IActionResult> GetReadingsForDeviceAsync(int deviceId, long from, long? to = null)
     {
         to ??= DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        if (to < from)
+        {
+            return BadRequest("Time window is incorrect: opening time is less than closing time.");
+        }
+
         var readings = await _readingsStorage.GetReadingsFromWindowAsync(deviceId, from, to.Value);
         
         return readings is not null ? Ok(readings) : NotFound($"Device with ID {deviceId} doesn't exist.");

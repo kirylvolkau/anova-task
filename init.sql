@@ -18,3 +18,11 @@ create table readings (
 insert into devices (device_id, name, location) values
 (1, 'great machine 1', 'warsaw'),
 (234, 'great machine 2', 'porto');
+
+insert into readings (timestamp, device_id, raw_value, reading_type) values
+(1674150492, 1, '80', 'battery'),
+(1642610892, 1, '92', 'battery'),
+(1647708492, 1, '90', 'battery'),
+(1666194492, 1, '55', 'battery'),
+(1666194492, 234, '44', 'tank'),
+(1664194492, 234, '33', 'tank');

@@ -1,11 +1,12 @@
 using System.Collections.Immutable;
 using Dapper;
+using Npgsql;
 
 namespace AnovaTask.API.Storage;
 
 public interface IReadingsStorage
 {
-    public Task<int> AddReadingsAsync(IEnumerable<ReadingDto> readings);
+    public Task<bool> AddReadingsAsync(IEnumerable<ReadingDto> readings);
 
     public Task<ImmutableList<ReadingDto>?> GetReadingsFromWindowAsync(int deviceId, long from, long to);
 }
@@ -13,31 +14,42 @@ public interface IReadingsStorage
 public class ReadingsStorage : IReadingsStorage
 {
     private readonly DapperContext _dapperContext;
+    private readonly ILogger<ReadingsStorage> _logger;
 
-    public ReadingsStorage(DapperContext dapperContext)
+    public ReadingsStorage(DapperContext dapperContext, ILogger<ReadingsStorage> logger)
     {
         _dapperContext = dapperContext;
+        _logger = logger;
     }
 
-    public async Task<int> AddReadingsAsync(IEnumerable<ReadingDto> readings)
+    public async Task<bool> AddReadingsAsync(IEnumerable<ReadingDto> readings)
     {
         using var connection = _dapperContext.CreateConnection();
-        var insertedCount = 0;
-        foreach (var reading in readings)
+        connection.Open();
+        using var transaction = connection.BeginTransaction();
+        try
         {
-            var inserted = await connection.ExecuteAsync($@"
+            foreach (var reading in readings)
+            {
+                _ = await connection.ExecuteAsync($@"
 insert into {DapperContext.ReadingsTable} (timestamp, device_id, reading_type, raw_value) values 
 (@timestamp, @device_id, @reading_type, @raw_value)".Trim(), new
-            {
-                timestamp = reading.Timestamp,
-                device_id = reading.DeviceId,
-                reading_type = reading.ReadingType,
-                raw_value = reading.RawValue,
-            });
-            insertedCount += inserted;
+                {
+                    timestamp = reading.Timestamp,
+                    device_id = reading.DeviceId,
+                    reading_type = reading.ReadingType,
+                    raw_value = reading.RawValue,
+                });
+            }
+            transaction.Commit();
+            return true;
         }
-
-        return insertedCount;
+        catch(PostgresException ex)
+        {
+            _logger.LogError(ex.MessageText);
+            transaction.Rollback();
+            return false;
+        }
     }
 
     public async Task<ImmutableList<ReadingDto>?> GetReadingsFromWindowAsync(int deviceId, long from, long to)
@@ -57,7 +69,9 @@ where device_id = @deviceId
 and timestamp between @from and @to
 ".Trim(), new
         {
-            deviceId, from, to,
+            deviceId,
+            from,
+            to,
         });
 
         return readings.ToImmutableList();

@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // ------- Add services to the container. ---------
 builder.Services.AddControllers();
 
+// Configure storage
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddScoped<IDevicesStorage, DevicesStorage>();

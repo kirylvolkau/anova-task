@@ -27,14 +27,11 @@ public class DevicesController : ControllerBase
 
         return device is not null
             ? Ok(device)
-            : new ObjectResult(new { msg = $"Device with ID {deviceDto.DeviceId} already exists." })
-            {
-                StatusCode = StatusCodes.Status409Conflict
-            };
+            : BadRequest($"Device with ID {deviceDto.DeviceId} already exists.");
     }
 
     [HttpGet("/{deviceId:int}")]
-    public async Task<IActionResult> GetDeviceByIdAsync([FromRoute] int deviceId)
+    public async Task<IActionResult> GetDeviceByIdAsync(int deviceId)
     {
         var device = await _devicesStorage.GetDeviceByIdAsync(deviceId);
         
@@ -48,7 +45,7 @@ public class DevicesController : ControllerBase
     }
 
     [HttpPut("/{deviceId:int}")]
-    public async Task<IActionResult> UpdateDeviceAsync([FromRoute] int deviceId, [FromBody] DeviceDto deviceDto)
+    public async Task<IActionResult> UpdateDeviceAsync(int deviceId, [FromBody] DeviceDto deviceDto)
     {
         if (!ModelState.IsValid)
         {

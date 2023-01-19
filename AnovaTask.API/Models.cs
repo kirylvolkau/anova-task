@@ -6,13 +6,13 @@ namespace AnovaTask.API;
 public class DeviceDto
 {
     [JsonPropertyName("device_id")]
-    public int DeviceId { get; init; }
+    public int DeviceId { get; set; }
 
     [Required(AllowEmptyStrings = false)]
-    public string Name { get; init; } = null!;
+    public string Name { get; set; } = null!;
 
     [Required(AllowEmptyStrings = false)]
-    public string Location { get; init; } = null!;
+    public string Location { get; set; } = null!;
 }
 
 public class ReadingDto
@@ -21,13 +21,13 @@ public class ReadingDto
     public long Timestamp { get; set; }
     
     [JsonPropertyName("device_id")]
-    public int DeviceId { get; init; }
+    public int DeviceId { get; set; }
 
     [Required(AllowEmptyStrings = false)]
-    [JsonPropertyName("device_id")]
-    public string ReadingType { get; init; } = null!;
+    [JsonPropertyName("reading_type")]
+    public string ReadingType { get; set; } = null!;
 
     [Required(AllowEmptyStrings = false)]
-    [JsonPropertyName("device_id")]
-    public string RawValue { get; init; } = null!;
+    [JsonPropertyName("raw_value")]
+    public string RawValue { get; set; } = null!;
 }

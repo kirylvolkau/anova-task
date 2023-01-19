@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Dapper;
+using Npgsql;
 
 namespace AnovaTask.API.Storage;
 
@@ -15,25 +16,35 @@ public interface IDevicesStorage
 public class DevicesStorage : IDevicesStorage
 {
     private readonly DapperContext _dapperContext;
+    private readonly ILogger<DevicesStorage> _logger;
 
-    public DevicesStorage(DapperContext dapperContext)
+    public DevicesStorage(DapperContext dapperContext, ILogger<DevicesStorage> logger)
     {
         _dapperContext = dapperContext;
+        _logger = logger;
     }
 
     public async Task<DeviceDto?> CreateDeviceAsync(DeviceDto deviceDto)
     {
-        using var connection = _dapperContext.CreateConnection();
-        var insertedCount = await connection.ExecuteAsync($@"
+        try 
+        {
+            using var connection = _dapperContext.CreateConnection();
+            _ = await connection.ExecuteAsync($@"
 insert into {DapperContext.DevicesTable} (device_id, name, location) values
 (@deviceId, @name, @location)", new
+            {
+                deviceId = deviceDto.DeviceId,
+                name = deviceDto.Name,
+                location = deviceDto.Location,
+            });
+        }
+        catch(PostgresException e)
         {
-            deviceId = deviceDto.DeviceId,
-            name = deviceDto.Name,
-            location = deviceDto.Location,
-        });
+            _logger.LogError(e.MessageText);
+            return null;
+        }
 
-        return insertedCount != 1 ? null : await GetDeviceByIdAsync(deviceDto.DeviceId);
+        return await GetDeviceByIdAsync(deviceDto.DeviceId);
     }
 
     public async Task<DeviceDto?> GetDeviceByIdAsync(int deviceId)
@@ -54,20 +65,35 @@ insert into {DapperContext.DevicesTable} (device_id, name, location) values
 
     public async Task<DeviceDto?> UpdateDeviceAsync(int deviceId, DeviceDto deviceDto)
     {
-        using var connection = _dapperContext.CreateConnection();
-        var updatedCount = await connection.ExecuteAsync($@"
+        try
+        {
+            using var connection = _dapperContext.CreateConnection();
+
+            var device = await GetDeviceByIdAsync(deviceId);
+            if (device is null)
+            {
+                return null;
+            }
+
+            _ = await connection.ExecuteAsync($@"
 update {DapperContext.DevicesTable}
-set device_id = @newDeviceId, name = @newName, location = @newLocation,
+set device_id = @newDeviceId, name = @newName, location = @newLocation
 where device_id = @deviceId
 ".Trim(), new
+            {
+                deviceId,
+                newDeviceId = deviceDto.DeviceId,
+                newName = deviceDto.Name,
+                newLocation = deviceDto.Location,
+            });
+        }
+        catch(PostgresException e)
         {
-            deviceId,
-            newDeviceId = deviceDto.DeviceId,
-            newName = deviceDto.Name,
-            newLocation = deviceDto.Location,
-        });
+            _logger.LogError(e.MessageText);
+            return null;
+        }
 
-        return updatedCount == 0 ? null : await GetDeviceByIdAsync(deviceDto.DeviceId);
+        return await GetDeviceByIdAsync(deviceDto.DeviceId);
     }
 
     public async Task<DeviceDto?> DeleteDeviceByIdAsync(int deviceId)
