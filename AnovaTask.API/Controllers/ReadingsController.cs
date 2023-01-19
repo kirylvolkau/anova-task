@@ -19,7 +19,7 @@ public class ReadingsController : ControllerBase
     public async Task<IActionResult> InsertReadingsAsync([FromBody] ImmutableList<ReadingDto> readingDtos)
     {
         var insertedLines = await _readingsStorage.AddReadingsAsync(readingDtos);
-        
+
         return insertedLines ? Ok() : BadRequest("Couldn't insert all readings.");
     }
 
@@ -34,7 +34,7 @@ public class ReadingsController : ControllerBase
         }
 
         var readings = await _readingsStorage.GetReadingsFromWindowAsync(deviceId, from, to.Value);
-        
+
         return readings is not null ? Ok(readings) : NotFound($"Device with ID {deviceId} doesn't exist.");
     }
 }

@@ -19,7 +19,7 @@ public class ReadingDto
 {
     [Range(0L, 31_536_000_000L)]
     public long Timestamp { get; set; }
-    
+
     [JsonPropertyName("device_id")]
     public int DeviceId { get; set; }
 

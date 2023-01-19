@@ -44,7 +44,7 @@ insert into {DapperContext.ReadingsTable} (timestamp, device_id, reading_type, r
             transaction.Commit();
             return true;
         }
-        catch(PostgresException ex)
+        catch (PostgresException ex)
         {
             _logger.LogError(ex.MessageText);
             transaction.Rollback();

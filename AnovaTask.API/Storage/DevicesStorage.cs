@@ -26,7 +26,7 @@ public class DevicesStorage : IDevicesStorage
 
     public async Task<DeviceDto?> CreateDeviceAsync(DeviceDto deviceDto)
     {
-        try 
+        try
         {
             using var connection = _dapperContext.CreateConnection();
             _ = await connection.ExecuteAsync($@"
@@ -38,7 +38,7 @@ insert into {DapperContext.DevicesTable} (device_id, name, location) values
                 location = deviceDto.Location,
             });
         }
-        catch(PostgresException e)
+        catch (PostgresException e)
         {
             _logger.LogError(e.MessageText);
             return null;
@@ -87,7 +87,7 @@ where device_id = @deviceId
                 newLocation = deviceDto.Location,
             });
         }
-        catch(PostgresException e)
+        catch (PostgresException e)
         {
             _logger.LogError(e.MessageText);
             return null;

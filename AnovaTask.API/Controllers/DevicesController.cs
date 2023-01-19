@@ -22,7 +22,7 @@ public class DevicesController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        
+
         var device = await _devicesStorage.CreateDeviceAsync(deviceDto);
 
         return device is not null
@@ -34,7 +34,7 @@ public class DevicesController : ControllerBase
     public async Task<IActionResult> GetDeviceByIdAsync(int deviceId)
     {
         var device = await _devicesStorage.GetDeviceByIdAsync(deviceId);
-        
+
         return device is not null ? Ok(device) : NotFound($"Device with Id {deviceId} doesn't exist.");
     }
 
@@ -51,7 +51,7 @@ public class DevicesController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        
+
         var device = await _devicesStorage.UpdateDeviceAsync(deviceId, deviceDto);
 
         return device is not null ? Ok(device) : NotFound($"Device with Id {deviceId} doesn't exist.");
