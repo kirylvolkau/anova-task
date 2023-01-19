@@ -14,7 +14,8 @@ builder.Services.AddScoped<IReadingsStorage, ReadingsStorage>();
 
 // Add swagger-related services
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options=> {
+builder.Services.AddSwaggerGen(options =>
+{
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });

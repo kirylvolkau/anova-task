@@ -50,3 +50,4 @@ from the root of the repo. Go to:
 - handling of insertion of `records` could be improved: the error could be specifc about which device was not found (currently basing on exception from `Dapper`)
 - smaller details have been added to the code documentation
 - tests have not been implemented (see email) - however, I would use `xUnit` with `Moq` and `FluentValidations` for unit tests and combination of `Specflow` and `FluentDocker` for integration tests
+- `dotnet format` has been used for formatting (no `.editorconfig`)
