@@ -2,17 +2,17 @@
 
 This repository contains solution to the Anova recrutation test task:
 
-- [ ] implementation of devices controller
-  - [ ] `POST /device` (create) device
-  - [ ] `GET /device/{device_id}` (get by id) device
-  - [ ] `PUT /device/{device_id}` (update by id and new value) device
-  - [ ] `GET /device` (get all) devices
-  - [ ] `DELETE /device/{device_id}` (delete by id) device
-- [ ] implementatino of readings controller
-  - [ ] `POST /readings` (save) list of readings
-  - [ ] `GET /readings/{device_id}/{from_timestamp}/{to_timestamp}` (get list of readings) based on the device ID and time window
-- [ ] documentation of the code
-- [ ] docker-compose for database and the code
+- [X] implementation of devices controller
+  - [X] `POST /device` (create) device
+  - [X] `GET /device/{device_id}` (get by id) device
+  - [X] `PUT /device/{device_id}` (update by id and new value) device
+  - [X] `GET /device` (get all) devices
+  - [X] `DELETE /device/{device_id}` (delete by id) device
+- [X] implementatino of readings controller
+  - [X] `POST /readings` (save) list of readings
+  - [X] `GET /readings/{device_id}/{from_timestamp}/{to_timestamp}` (get list of readings) based on the device ID and time window
+- [X] documentation of the code
+- [X] docker-compose for database and the backend
 - [ ] unit tests
   - [ ] readings storage tests
   - [ ] device storage tests
