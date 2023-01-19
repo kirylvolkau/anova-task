@@ -39,6 +39,8 @@ from the root of the repo. Go to:
 - timestamp is in unix seconds
 - timestamp will be provided by users in unix seconds
 - `POST /readings` endpoint can accept readings from multiple devices
+- `reading_type` type is `string` since we don't know all the restrictions / requirements and we don't want to lost the data - so we choose the least restrictive one. in real-life system it would probably be some kind of enum
+- same goes for the `raw_value`: we can have different reading types - maybe, some of them reports reading as a string - we don't want to lose it
 
 ## Implementation details
 
