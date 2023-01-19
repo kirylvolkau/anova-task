@@ -3,7 +3,8 @@ version: '3.8'
 services:
   db: 
     environment:
-      POSTGRES_PASSWORD: "SomeHa!dPas1wod"
+      # in real life should be set by some secret key storage (preferably from CICD pipeline)
+      POSTGRES_PASSWORD: "SomeHa!dPas1wod" 
     image: postgres
     ports:
       - "5432:5432"
